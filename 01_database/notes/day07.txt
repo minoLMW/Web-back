@@ -1,0 +1,53 @@
+Day7
+
+1. Built-in Function(Cont'd)
+(2) Group(Aggregate) Function
+    - 한 개 이상의 입력/한 줄의 출력
+
+    1) count(*) : 결과의 개수를 셈
+    2) distinct : 결과의 중복들을 제거
+    3) 1) + 2) 조합으로 중복되지 않은 값의 개수
+
+    4) min, max
+    5) avg, sum
+
+2. SQL Advanced
+(1) order by
+    - 결과를 정렬하기 위한 문법
+    - HighSchool Student 테이블의 결과를 정렬하고 싶다.
+    -> 저학년에서 고학년 순, 1반부터 N반의 순, 1번부터 N번까지
+    -> order by 학년, 반, 번
+    -> order by 학년 desc, 반, 번
+    -> order by colname [asc|desc], colname2 ...
+
+(2) group by
+    - (aggregate 함수를) 그룹별로 나누어 적용
+    - 한국어로 번역하면 ~별
+    - select 학년, avg(점수)
+      from 모든학생중간고사결과 테이블
+      group by 학년
+
+      select 학년, 반, avg(점수)
+      from 모든학생중간고사결과 테이블
+      group by 학년, 반
+      order by 학년 desc, 반
+
+(3) having
+    - aggregate 함수의 결과물에 대한 조건 filtering
+    - select 학년, 반, avg(점수)
+      from 모든학생중간고사결과 테이블
+      group by 학년, 반
+      having avg(점수) >= 80.0
+      order by 학년, 반
+
+(4) union, union all
+    - 두 집합을 연결하는 구문
+    - union은 중복을 제거, union all은 중복 제거하지 않음
+
+(5) 이외에 DB의 특성에 따라 minus를 지원하는 경우가 있음
+    - 데이터 검증에 많이 사용됨(A 집합과 B 집합이 동일한가)          
+      A minus B => 데이터가 없다.
+      B minus A => 데이터가 없다.
+      => 이 두 가지가 모두 충족되면 A와 B가 동일하다.
+
+

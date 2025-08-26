@@ -1,0 +1,24 @@
+Day8
+
+1. SQL 연습
+    - case when
+    - group by
+    - row로 펼치는 기술(using sum)
+
+2. 외부 데이터를 활용하여 데이터 쌓기
+    - 병원정보서비스.csv를 이용
+    - 병원정보서비스는 공공데이터포털의 대표적인 데이터 중 하나    
+    - csv는 comma separated value의 약자로
+      데이터간 구분자 ,를 가지고 데이터셋이 구성된다.
+      ex) A,B,C,D,"Boys,be ambitious"
+          A|B|C|D|Boys,be ambitious
+(1) hptl_mast 테이블 생성하기
+(2) 병원데이터가 포함된 csv 로드하기
+    -> dbeaver에서 테이블 우클릭(안나오면 refresh)
+    -> 가져오기(import) 실행
+    -> utf-8 확인, 첫 줄 헤더여부 none 선택
+    -> preview를 통해 데이터 확인(한글, 컬럼순서)
+    -> commit은 10000으로 세팅 후 진행(Proceed)
+(3) 다양한 SQL 실습
+
+=> 내일은 정규화 하는 날

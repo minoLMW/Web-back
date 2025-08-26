@@ -1,0 +1,60 @@
+Day5
+
+1. create table
+    - 테이블을 생성하는 명령
+    - 컬럼명, 컬럼타입, default, null가능여부
+
+    - create table 테이블명 (
+        컬럼명  컬럼타입  default **** not null,
+        ...
+    );
+    
+2. CTAS(씨타스)
+    - create table as select
+    - 크게 2가지의 용도
+        1) 테이블 껍데기만 가져가서 새로 만들고 싶을 때
+            -- all data copy(backup)
+            create table movie_bk as
+            select *
+            from   movie;
+
+            create table movie_frame as
+            select movie_name, open_date
+            from   movie
+            where  1 = 0;
+
+            -- 2개 이상의 테이블에서 가져온 컬럼으로 신규 테이블 생성하기
+            create table movie_theater_info as
+            select a.movie_name, a.open_date,
+                   b.theater_name, b.theater_addr
+            from   movie a, theater b
+            where  a.theater_cd = b.theater_cd
+            and    1 = 0;
+
+        2) 테이블의 일부만 남기고 지우고 싶을 때
+            create table movie_bk as
+            select *
+            from   movie
+            where  open_date >= '20000101'
+            ;
+
+            movie와 movie_bk를 exchange 하면 작업 끝
+
+3. alias
+    - 별명
+    - 테이블이나 컬럼, 
+      결과집합(ResultSet)의 이름을 다르게 정의
+    - 테이블명이나 컬럼명이 길기 때문에 줄여서 부르고 싶을 때 사용
+
+    - zinv_svc_inv_spc as zsis
+    , zinv_svc_inv_desc as zsid
+
+    - a, b, c, d, e
+    - t1, t2, t3 ....
+    - m, t
+
+    - sum(amt)
+      
+
+
+

@@ -1,0 +1,54 @@
+Day4
+
+1. SQL 기본 문법(Cont'd)
+(3) update
+    - 테이블의 데이터를 변경하는 구문
+    1) 기본 사용법
+        update 테이블명
+        set    변경할컬럼1 = 변경할값1
+             , 변경할컬럼2 = 변경할값2
+        where  조건식
+
+    - 테이블에 200개의 컬럼이 있다고 가정
+      나는 그 중 한 개의 컬럼만 데이터를 바꿀 예정
+    => 해당 데이터만 바꾸는 방식(X)
+       해당 row 전체를 지운다 + 새로운 200개 컬럼을 넣는다.
+       update = delete + insert
+       DB에 부담이 가장 많이 되는 명령문
+
+(4) delete
+    - 데이터를 삭제하는 문장
+    1) 기본 사용법
+        delete from 테이블명
+        where 조건절
+        ;
+    - 데이터가 삭제되면 복구가 불가능하기 때문에
+      백업을 받고나서 삭제 처리
+      => 이상이 없을 경우 백업 삭제
+
+2. 응용 SQL
+(1) where 조건에서의 and / or
+    - select cols... from 테이블명
+      where ...
+    - where (cond1 or cond2) and cond3
+    => 코드를 명료하게 작성할 것
+
+(2) between
+    - between A and B
+    - A부터 B까지(A, B 둘다 포함)
+    - age between 10 
+          and     19 : age가 10부터 19까지
+      age >= 10 and age <= 19
+    - 가격이 만원대
+      price between 10000 and 19999
+
+(3) concatenate 방법
+    - 문자(열)을 붙이는 기술(+가 안통함)
+    - Oracle
+        'data1' || 'data2' => data1data2
+        'data1' || '-' || 'data2' => data1-data2
+    - MySQL 계열
+        concat(컬럼1, 컬럼2, 컬럼3, 컬럼4)
+        => 컬럼1컬럼2컬럼3컬럼4
+        cf) in Excel
+            concatenate(concatenate(concatenate(컬럼1,컬럼2),컬럼3),컬럼4)

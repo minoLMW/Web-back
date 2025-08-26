@@ -1,0 +1,97 @@
+Day9
+
+1. Single row function(2)
+(1) lpad, rpad : 왼쪽, 오른쪽에 문자 붙이기
+    회사 간, 시스템 간 인터페이스 시
+    고정 길이(fixed length)로 주고받는 경우가 많음
+    공공기관으로의 제출 파일, 고정길이 방식의 웹 I/F
+    lpad(데이터, 총자리수, 모자라면 채울 문자)
+    lpad(요금, 15, 0)
+
+(2) replace : 특정 문자열을 다른 문자열로 대체
+    replace(데이터, 대상문자열, 바꿀문자열)
+
+2. 정규화(Normalization)
+(1) 정규화의 목적
+    - 테이블 간 중복된 데이터를 허용하지 않는 것이 목표
+    - 무결성을 유지하면서 DB의 저장공간을 줄일 수 있음
+
+    order_list 테이블
+    order_no    prod        location    trans_fee
+    1           pencil      seoul       2500
+    2           plate       jeju        5000
+    3           nintendo    seoul       2500
+
+    order_list에서 location이 seoul이면 무조건 2500원인데
+    왜 2500이라는 데이터를 보관하고 있는가?
+
+    trans_fee_map
+    location    trans_fee
+    seoul       2500
+    jeju        4000
+
+    기존 order_list에서 trans_fee 컬럼을 삭제하고
+    새로운 코드 테이블을 생성하여 용량을 줄이는 것
+    => 정규화
+
+(2) 정규화의 정의
+    - 데이터의 삽입, 삭제, 수정 시 발생할 수 있는
+      이상현상(anomaly)을 줄이는 과정
+    - 데이터(테이블)을 분리하는 것으로 보통 3차까지 진행
+
+(3) 이상현상(anomaly)
+    테이블의 잘못된 설계로 인해 불필요한 데이터가 중복되어
+    공간이 낭비되는 현상
+
+    id          name    major   classcode   classname   members
+    apple       kim     com.    C001        Java        30
+    apple       kim     com.    C002        DBMS        35
+    apple       kim     com.    C003        Python      30
+    lenon       john    music   A001        Drum        10
+    sunshin     lee     sea     B001        Ship        10
+
+    1) 삽입 이상
+    새로운 데이터를 넣을 때 불필요한 데이터가 들어가는 문제
+    왜? 종속적인 데이터도 넣어야 하기 때문에 +
+    수강과목을 정하지 않은 학생을 넣을 때에 수업명을 비울 수 없어
+    X001, TBD 등을 만들어 넣어야 함
+
+    2) 갱신 이상
+    중복된 행 중 일부만 변경하면 데이터의 불일치 발생
+    kim이 com. 전공을 때려치고 social 전공으로 바꾸면
+    반드시 3개 행 모두를 바꿔야 하지만
+    일부만 수정하면 이상 현상이 발생
+
+    3) 삭제 이상
+    행을 삭제하면 필요한 데이터까지 삭제되는 문제
+    Drum 수업을 폐강하면 john lenon 데이터가 삭제됨
+
+(4) 정규화의 종류
+    1) 1차 정규화
+        - 하나의 컬럼에는 하나의 정보(값)만 존재
+          => 원자성
+
+    * Simcity
+    User    Building        Cost        Place           PlaceSize
+    -------------------------------------------------------------
+    Bach    Farm,Fac        50,70       Plain,City      100,200
+    Mozart  Farm,Fac,Cos    50,70,200   Plain,City,City 100,200,200
+    Tscai   Fac             70          Shore           500
+
+    => User가 건물을 건설할 때마다 해당 row값을 update 필요
+    => update는 delete -> insert으로 시스템에 부하를 줌
+
+    Bach    Farm            50          Plain           100
+    Bach    Fac             70          City            200
+    Mozart  Farm            50          Plain           100
+    Mozart  Fac             70          City            200
+    Mozart  Cos             200         City            200
+    Tscai   Fac             70          Shore           500
+
+    2) 2차 정규화
+        - 후보키의 진부분집합에서 부분함수 종속성을 제거
+          부분함수적 종속을 완전함수적 종속으로 바꾸는 과정
+
+        - 진부분집합
+          A, B, C : (A), (B), (C), (A,B), (B,C), (A,C)
+                    (A,B,C)는 아님

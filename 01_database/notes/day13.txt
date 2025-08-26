@@ -1,0 +1,66 @@
+Day13
+
+1. Subquery
+    - 쿼리의 결과(괄호)가 다른 쿼리의 입력으로 사용되는 것
+    - 주로 from 절에 괄호를 사용하여 존재
+      from외에도 select절 또는 where절에도 사용 가능
+
+2. Scalar Subquery
+    - Subquery 중 select절에 위치하여 
+      인풋 1개당 1개의 결과가 나오는 쿼리
+    - 두 개 이상의 결과가 나오면 Oracle에서는 오류처리
+      기타 DB에서는 오류 또는 첫 줄만 결과로 리턴
+      => 보통 여러 줄의 결과를 막기 위해 
+         limit 1의 조건을 주기도 함
+    - select에만 영향을 미치는 쿼리이면서, 
+      본체의 결과집합이 수천건 이내인 경우
+      caching 효과로 인해 압도적인 성능을 보임
+
+      select (select 품종명 from 품종코드
+              where race_cd = a.race_cd)
+      from 야옹이 리스트 a   -- 야옹이가 수만마리여도
+                               품종은 수백개 이하
+      ;
+
+3. exists와 in
+    - where 절에 위치하여, 특정 조건에 맞는 것이 있는지
+      체크하는 쿼리로 유사성을 가지고 있음
+    - exists는 존재하는지의 여부만 파악
+      in은 특정 집합을 가지고 있고 그 안에 존재하는지의 여부를 
+      파악
+    - 예제 참조할 것  
+
+    - exists는 not exists로 많이 활용
+    예) 오늘 주문한 고객 중 우리 사이트에서 처음 주문한 고객
+        = 오늘 처음 주문한 고객 가져와봐
+        select 고객
+        from   주문 a
+        where  주문일자 = 오늘
+        and    not exists (select 1
+                           from   주문 b
+                           where  b.고객 = a.고객
+                           and    b.주문일자 < 오늘
+                           )
+
+    - in은 특정 조건을 만족하는 집합을 먼저 생성한 후
+      그 결과를 이용하는 방법
+    - 실행계획은 생각한 것과 다를 수 있다.
+      실제로 exists와 in은 실행계획 상으로는 같을 수도 있음
+    - in도 not in이 존재한다.
+
+4. Join 방식
+    - nested loop join(NL join)
+      : 수만건 이하의 조인 시 주로 사용
+      : A테이블에서 1건 추출하여 B테이블 조회 -> 반복
+
+    - sort-merge join(SM join)
+      : A테이블을 정렬, B테이블을 정렬(조인키 순서로)
+      : 하나씩 꺼내서 비교하여 처리하는 방식
+      : hash join의 등장으로 = 조인에서는 힘을 못씀
+      : 크기 비교 조인일 경우는 여전히 유용
+
+    - hash join
+      : 대량 조인일 경우 매우 유용
+      : 먼저 읽는 테이블로 hash bucket을 만들고 대략 분류
+        나중 읽는 테이블을 해당 bucket로 던지고
+        bucket 내에서만 조인을 수행함

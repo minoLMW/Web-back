@@ -1,0 +1,79 @@
+Day6
+
+1. case when과 with절의 활용
+(1) case when
+    - 없는 데이터를 만들어내는 기술
+    - 모든 데이터를 테이블에 담을 수는 없다.
+    - 예)
+      select case when price < 1000 then "완전저가"
+                  when price between 1001 and 10000 then "저가"
+                  when price between 10001 and 50000 then "중가"
+                  else "바가지" end as "내가 생각하는 등급"
+      from prod
+      ;
+
+      select case when score < 60 then 'F'
+                  when score between 61 and 70 then 'D'
+                  ...
+
+    - 각 case 마다 중복되는 구간이 있으면 안됨
+    - 여행상품 컬럼 중 하나가 지역이 있다고 가정
+      '유럽', '아시아', '미주', '아프리카' 데이터 존재
+      => 유럽 미주 아시아 아프리카 순으로 데이터를 추출할 것
+
+      select case when region = '유럽' then '01-유럽'
+                  when region = '아시아' then '03-아시아'
+                  ...
+                  when region = '미주' then '02-미주'
+                  else '99-기타' end as region_new
+
+      => 유럽 미주는 인기상품이라고 하고, 나머지는 비인기상품
+      select case when region in ('유럽','미주') then '인기상품'
+                  else '비인기상품' end as region_new
+
+(2) with절의 활용
+    - SQL의 맨 윗 부분에만 존재 가능
+    - 예전에는 서브쿼리로만 가능했던 기술
+    - 결과집합의 이름을 미리 부여하여 테이블처럼 사용
+    - 중요한 이점 2가지 + 1
+        1) 가독성이 매우 뛰어나게 된다.
+        2) 다른 SQL로 쉽게 copy해서 쓸 수 있다.
+        3) 동일한 로직이 여러 번 수행될 것을 한 번만 수행하는 것도 가능
+           materialize
+
+    with hpg as /* high_price_goods */
+    (
+        select prodname, price
+        from   prod
+        where  price > 100000
+    )
+    select *
+    from   hpg
+    ....
+    select *
+    from   hpg
+    where  price > 1000000
+    ;
+
+2. Built-in Functions
+    - 설치와 동시에 사용 가능한 함수
+
+(1) Single row Function
+    - 한 개의 데이터 입력 -> 한 개의 데이터 출력
+    1) numeric
+        abs(x), ceil(x), floor(x), round(x,y)
+        ceil(4.7) -> 5, ceil(-4.7) -> -4
+        trunc(4.7) -> 4, trunc(-4.7) -> -4
+    2) text
+        lower(str), upper(str) : 소문자로, 대문자로
+        length(str) : str의 길이 구하기(한글은 몇 글자로?)
+        substr
+    3) to_char, to_date
+        날짜를 문자열로, 문자열을 날짜로
+
+(2) Group(Aggregate) Function
+
+
+
+                  
+

@@ -1,0 +1,58 @@
+Day10
+
+1. 정규화(Cont'd)
+    3) 3차 정규화
+        - 1차 및 2차 정규화를 만족하고
+          이행적 함수적 종속을 갖지 않는 정규형
+
+        - 이행적 함수적 종속
+            A를 알면 B를 알고, B를 알면 C를 알기 때문에
+            A를 알면 C를 알게 되는 구조
+
+        Bach    Farm    Plain   
+        Bach    Fac     City
+
+        Plain   100
+        City    200
+        Shore   500
+
+2. 반정규화(Denormalization)        
+    - 활용 단계에서 정규화를 진행하지 않는 것이
+      더 장점이 있을 때 사용
+
+    ex) 게시판(Board)
+    1   Funny DBMS      apple
+    2   Funny Java      apple
+    3   Boring DBMS     honest
+
+    hash tag
+    1   DBMS
+    1   like
+    1   good
+    3   DBMS
+    3   boring
+
+    --> 반정규화 -> 성능 개선 목적
+    1   Funny DBMS      apple   #dbms #like #good
+    2   Funny Java      apple
+    3   Boring DBMS     honest  #dbms #boring
+
+3. Foreign Key(FK, 외래키)
+    - 다른 테이블에 있는 컬럼으로 내 테이블 데이터에
+      제약 조건을 두는 것
+    - 데이터 정합성을 위함
+
+    contract_mast(현재 계약 상태)
+    cont_id
+
+    constract_hist(계약 이력)
+    cont_id, date, seq
+
+    cont_id를 contract_mast의 cont_id로 FK로 설정
+
+    - 실제로 대형 데이터베이스를 가지고 있는 회사에서는
+      FK를 사용하지 않음
+    - 데이터가 추가될 때마다 체크 조건을 살핀다.
+      => 성능 저하
+    - 데이터를 삭제할 때(Archiving, Data Cutting)
+      병렬 작업 불가

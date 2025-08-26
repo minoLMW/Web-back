@@ -1,0 +1,29 @@
+Day11
+
+1. Java Program과 DB의 연결
+(1) JDK 설치(Long Term Support-LTS 버전 선택)
+(2) Eclipse 설치
+(3) Driver 설치
+    Program      Driver       Database
+    Driver는 프로그램과 DB간 통신을 위한 도구
+    Driver는 Database 회사에서 제공함
+    - google에서 maria db jdbc driver 검색
+    - 일반적으로 eclipse 산하 extlib(없으면 생성)에 저장
+(4) Project명 우클릭 > Properties > Java Build Path
+    libraries 탭 > classpath 선택 > 우측 Add External Jars
+    다운받은 extlib폴더에 있는 jar 선택
+(5) Class.forName 으로 클래스 선택
+(6) conn = DriverManager.getConnection()으로 접속 객체 생성
+(7) 마음껏 사용
+(8) rs, conn, stmt, pstmt 초기화
+
+* Statement와 PreparedStatement의 차이
+  Statement(literal SQL)
+  select * from hptl_mast where hptl_nm = "내병원";
+
+  PreparedStatement
+  select * from hptl_mast where hptl_nm = ?;
+  ?는 SQL 실행 전 "내병원"으로 세팅
+
+  in DB
+  select * from hptl_mast where hptl_nm = :b1;
